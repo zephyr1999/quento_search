@@ -48,3 +48,10 @@ you can do:
 >>> b.depth_value_search(5,13)
 8 + 5 - 1 + 4 - 3 
 ```
+
+The paths.txt file is all possible paths through the 3x3 square:
+```
+0 1 2
+3 4 5
+6 7 8
+```
