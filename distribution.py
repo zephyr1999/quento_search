@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from itertools import permutations
 import seaborn as sns
 
+# flag that, if false, will bypass plotting
+run_plot = False
+
 # first lets get a list of all paths
 
 with open("paths.txt") as f:
@@ -52,12 +55,23 @@ def calc(board, path):
 # calculate all 3 million-ish board-path combinations
 vals = [calc(b,p) for b in boards for p in paths]
 
+buckets = list(range(min(vals),max(vals)+1))
+counts = [len([v for v in vals if v == b]) for b in buckets]
+
+
 # plot the distribution
-sns.distplot(vals, kde=False)
-plt.show()
+if run_plot:
+    plt.plot(buckets,counts)
+    plt.show()
 
-
-
+# some general notes: 
+# putting it into buckets and counts form, I can do analysis
+# much easier.
+#
+# mean = 5
+# median = 5
+# mode = 6
+# total len = 3024000 (note that this is just 15120 * 200
 
 
 
