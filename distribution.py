@@ -7,7 +7,7 @@ from itertools import permutations
 import seaborn as sns
 
 # flag that, if false, will bypass plotting
-run_plot = False
+run_plot = True
 
 # first lets get a list of all paths
 
@@ -31,16 +31,29 @@ with open("paths.txt") as f:
 # i.e. board_index = tuple_index * 2
 
 boards = list(permutations(range(1,10),5))
-                
+
+# first, we need a dict whose keys are the odd tile numbers
+# and whose values are the operations from the board.
+real_ops = {"1":lambda a,b: a + b, 
+       "3":lambda a,b: a - b,
+       "5":lambda a,b: a - b,
+       "7":lambda a,b: a + b
+       }
+
+plus_ops = {"1":lambda a,b: a + b, 
+       "3":lambda a,b: a + b,
+       "5":lambda a,b: a + b,
+       "7":lambda a,b: a + b
+       }
+
+minus_ops = {"1":lambda a,b: a - b, 
+       "3":lambda a,b: a - b,
+       "5":lambda a,b: a - b,
+       "7":lambda a,b: a - b
+       }
+
 # method that, given a board and a path, returns a value
-def calc(board, path):
-    # first, we need a dict whose keys are the odd tile numbers
-    # and whose values are the operations from the board.
-    ops = {"1":lambda a,b: a + b, 
-           "3":lambda a,b: a - b,
-           "5":lambda a,b: a - b,
-           "7":lambda a,b: a + b
-           }
+def calc(board, path,ops):
     # first, lets get a list of values from the path and board
     vals = [board[int(int(i)/2)] for i in path[::2]]
     os = [ops[i] for i in path[1::2]]
@@ -53,7 +66,7 @@ def calc(board, path):
     return r
 
 # calculate all 3 million-ish board-path combinations
-vals = [calc(b,p) for b in boards for p in paths]
+vals = [calc(b,p,minus_ops) for b in boards for p in paths]
 
 buckets = list(range(min(vals),max(vals)+1))
 counts = [len([v for v in vals if v == b]) for b in buckets]
@@ -64,7 +77,7 @@ if run_plot:
     plt.plot(buckets,counts)
     plt.show()
 
-# some general notes: 
+# some general notes for real_ops, i.e. the one corresponding to the actual board: 
 # putting it into buckets and counts form, I can do analysis
 # much easier.
 #
