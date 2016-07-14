@@ -66,15 +66,24 @@ def calc(board, path,ops):
     return r
 
 # calculate all 3 million-ish board-path combinations
-vals = [calc(b,p,minus_ops) for b in boards for p in paths]
+real_vals = [calc(b,p,real_ops) for b in boards for p in paths]
+plus_vals = [calc(b,p,plus_ops) for b in boards for p in paths]
+minus_vals = [calc(b,p,minus_ops) for b in boards for p in paths]
 
-buckets = list(range(min(vals),max(vals)+1))
-counts = [len([v for v in vals if v == b]) for b in buckets]
+real_buckets = list(range(min(real_vals),max(real_vals)+1))
+real_counts = [len([v for v in real_vals if v == b]) for b in real_buckets]
+
+plus_buckets = list(range(min(plus_vals),max(plus_vals)+1))
+plus_counts = [len([v for v in plus_vals if v == b]) for b in plus_buckets]
+
+minus_buckets = list(range(min(minus_vals),max(minus_vals)+1))
+minus_counts = [len([v for v in minus_vals if v == b]) for b in minus_buckets]
 
 
 # plot the distribution
 if run_plot:
-    plt.plot(buckets,counts)
+    sns.set_style("darkgrid")
+    plt.plot(real_buckets,real_counts,'g',plus_buckets,plus_counts,'r',minus_buckets,minus_counts,'b')
     plt.show()
 
 # some general notes for real_ops, i.e. the one corresponding to the actual board: 
